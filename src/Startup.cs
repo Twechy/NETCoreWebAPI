@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Db.CarServices.User;
 using Db.DbContext;
 using Db.DbContext.Db_Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -50,6 +51,7 @@ namespace netcorewebapi
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
+            services.AddCors();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
             services.AddAuthentication(options =>
                 {
@@ -59,7 +61,7 @@ namespace netcorewebapi
                 })
                 .AddJwtBearer(cfg =>
                 {
-                    cfg.Audience = "http://localhost:5001/";
+                    cfg.Audience = "http://localhost:5000/";
                     cfg.RequireHttpsMetadata = false;
                     cfg.SaveToken = true;
                     cfg.TokenValidationParameters = new TokenValidationParameters
@@ -84,6 +86,8 @@ namespace netcorewebapi
                     Description = "The Service HTTP API"
                 });
             });
+
+            services.AddScoped<IUser, UserService>();
 
             services.AddMvc();
         }

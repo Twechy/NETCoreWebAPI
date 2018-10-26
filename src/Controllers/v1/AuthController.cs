@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Db.CarServices.User;
 using Db.DbContext;
 using Db.DbContext.Db_Models;
 using Db.ViewModels;
@@ -21,14 +22,17 @@ namespace netcorewebapi.Controllers.v1
     [Route("api/v1/[controller]")]
     public class AuthController : ControllerBase
     {
+        private readonly IUser UserService;
         private readonly CarDb _db;
         private readonly SignInManager<AppUser> _mSignInManager;
         private readonly UserManager<AppUser> _mUserManager;
 
         public AuthController(CarDb context,
             UserManager<AppUser> userManager,
+            IUser userService,
             SignInManager<AppUser> signInManager)
         {
+            UserService = userService;
             _db = context;
             _mUserManager = userManager;
             _mSignInManager = signInManager;
@@ -68,12 +72,14 @@ namespace netcorewebapi.Controllers.v1
 
         [HttpGet]
         [Route("Get")]
-        public IActionResult Get([FromBody] LoginVm user)
+        public async Task<IActionResult> Get( /*[FromBody] LoginVm user*/)
         {
-            return Ok("Ok..");
+            var carsAsync = await UserService.GetCarsAsync();
+            return Ok(carsAsync);
         }
 
         [HttpPost]
+        [Route("register")]
         public async Task<IActionResult> Register([FromBody] LoginVm user)
         {
             /* setup a datault rule for default users */
@@ -91,24 +97,24 @@ namespace netcorewebapi.Controllers.v1
             if (userFromDb == null) return Unauthorized();
             var token = GenerateToken(userFromDb);
 
-            const string provider = "Server_Provider";
-            const int status = 1;
-            const string message = "Login successful";
-
             return Ok(new ResponseVm
             {
-                Status = status,
-                Message = message,
+                Status = 1,
+                userId = userFromDb.Id,
+                Rule = userFromDb.Rule,
+                Message = "Login successful",
                 AccessToken = token,
-                ProviderName = provider,
+                ProviderName = "Server_Provider",
             });
         }
 
-        [Authorize]
-        [HttpGet("logout")]
-        public async Task<IActionResult> Logout()
+        // [Authorize]
+        [HttpGet]
+        [Route("logout")]
+        public async Task<IActionResult> Logout([FromQuery] string userId)
         {
-            var user = await GetUserFromJwt(HttpContext, _mUserManager).ConfigureAwait(false);
+            var user = await _mUserManager.FindByIdAsync(userId).ConfigureAwait(false);
+            // var user = await GetUserFromJwt (HttpContext, _mUserManager).ConfigureAwait (false);
 
             if (user == null) return NotFound(ResponseVm.FailearLogin());
             var r = HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);

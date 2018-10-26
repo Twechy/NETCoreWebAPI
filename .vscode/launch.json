@@ -6,7 +6,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}/src/bin/Debug/netcoreapp2.0/netcorewebapi.dll",
+          "program": "${workspaceRoot}/src/bin/Debug/netcoreapp2.1/netcorewebapi.dll",
             "args": [],
             "cwd": "${workspaceRoot}/src",
             "stopAtEntry": false,

@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Db.CarServices.User;
 using Microsoft.AspNetCore.Mvc;
 using netcorewebapi.ViewModel;
 
@@ -12,7 +13,7 @@ namespace netcorewebapi.Controllers.v1
     {
         // GET api/values
         [HttpGet]
-        public IActionResult Get([FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
+        public IActionResult Get([FromQuery] int pageSize = 10, [FromQuery] int pageIndex = 0)
         {
             var items = new List<string>
             {
@@ -31,7 +32,7 @@ namespace netcorewebapi.Controllers.v1
             {
                 itemsOnPage = items.GetRange(pageSize * pageIndex, pageSize);
             }
-            
+
             var model = new PaginatedItemsViewModel<string>(
                 pageIndex, pageSize, total, itemsOnPage
             );
@@ -48,7 +49,7 @@ namespace netcorewebapi.Controllers.v1
 
         // POST api/values
         [HttpPost]
-        public IActionResult InsertOrUpdate([FromBody]string value)
+        public IActionResult InsertOrUpdate([FromBody] string value)
         {
             if (value == null)
             {
@@ -60,7 +61,7 @@ namespace netcorewebapi.Controllers.v1
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody]string value)
+        public IActionResult Update(int id, [FromBody] string value)
         {
             if (value == null)
             {
