@@ -11,14 +11,7 @@ namespace Db.DbContext
         {
         }
 
-        public DbSet<Car> Cars { get; set; }
-        public DbSet<City> City { get; set; }
-        public DbSet<PayType> PayType { get; set; }
-        public DbSet<Brand> Brands { get; set; }
-        public DbSet<Color> Colors { get; set; }
-        public DbSet<Engine> Engines { get; set; }
-        public DbSet<Fule> Fules { get; set; }
-        public Transmission Transmission { get; set; }
+        public DbSet<CarModel> Cars { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

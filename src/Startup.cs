@@ -1,6 +1,7 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Db.CarServices;
 using Db.CarServices.User;
 using Db.DbContext;
 using Db.DbContext.Db_Models;
@@ -51,7 +52,7 @@ namespace netcorewebapi
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-            services.AddCors();
+//            services.AddCors();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
             services.AddAuthentication(options =>
                 {
@@ -75,6 +76,7 @@ namespace netcorewebapi
                     };
                 });
 
+            services.AddScoped<IUser, UserService>();
             services.AddSwaggerGen(options =>
             {
                 options.DescribeAllEnumsAsStrings();
@@ -87,7 +89,6 @@ namespace netcorewebapi
                 });
             });
 
-            services.AddScoped<IUser, UserService>();
 
             services.AddMvc();
         }
@@ -119,6 +120,8 @@ namespace netcorewebapi
 
             app.UseSwagger()
                 .UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "HTTP API V1"); });
+            
+            SeedingService.SeedDbWithDummyCars(IoCContainer.Context).Wait();
         }
     }
 }

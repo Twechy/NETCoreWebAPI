@@ -9,7 +9,7 @@ using netcorewebapi.ViewModel;
 namespace netcorewebapi.Controllers.v1
 {
     [Route("api/v1/[controller]")]
-    public class ValuesController : Controller
+    public class ValuesController : ControllerBase
     {
         // GET api/values
         [HttpGet]

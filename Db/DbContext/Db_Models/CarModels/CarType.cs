@@ -1,8 +1,8 @@
 namespace Db.DbContext.Db_Models.CarModels
 {
-    public class Brand
+    public class CarType
     {
         public int Id { get; set; }
-        public string BrandName { get; set; }
+        public string Type { get; set; }
     }
 }

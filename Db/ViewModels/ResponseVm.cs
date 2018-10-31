@@ -2,7 +2,7 @@ namespace Db.ViewModels
 {
     public class ResponseVm
     {
-        public string userId;
+        public string UserId;
 
         public int Status { get; set; }
 
